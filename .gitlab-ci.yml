@@ -1,6 +1,21 @@
+stages:
+    - test
+    - build
+
 test:
+    stage: test
     image: node:18.9.1-alpine3.16
     before_script:
         - npm install
     script:
         - npm run test:unit
+
+build:
+    stage: build
+    image: node:18.9.1-alpine3.16
+    before_script:
+        - npm install
+    needs:
+        - test
+    script:
+        - npm run build
