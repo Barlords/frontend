@@ -20,6 +20,8 @@ linter:
 
 test:
     stage: test
+    needs:
+        - linter
     image: node:18.9.1-alpine3.16
     before_script:
         - npm install
