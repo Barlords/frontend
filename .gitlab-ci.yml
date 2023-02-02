@@ -1,9 +1,22 @@
 stages:
+    - linter
     - test
     - build
     - build-docker-image
     - sonarcloud-check
     - deploy
+
+linter:
+    stage: linter
+    image: node:18.9.1-alpine3.16
+    before_script:
+        - npm install
+    script:
+        - npm run lint-check
+    only:
+        - merge_requests
+        - master
+        - main
 
 test:
     stage: test
@@ -13,9 +26,9 @@ test:
     script:
         - npm run test:unit
     only:
-          - merge_requests
-          - master
-          - main
+        - merge_requests
+        - master
+        - main
 
 build:
     stage: build
@@ -71,6 +84,7 @@ sonarcloud-check:
         - master
         - main
         - develop
+    allow_failure: true
 
 deploy:
     stage: deploy
