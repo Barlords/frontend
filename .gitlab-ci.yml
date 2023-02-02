@@ -3,6 +3,7 @@ stages:
     - build
     - build-docker-image
     - sonarcloud-check
+    - deploy
 
 test:
     stage: test
@@ -11,6 +12,10 @@ test:
         - npm install
     script:
         - npm run test:unit
+    only:
+          - merge_requests
+          - master
+          - main
 
 build:
     stage: build
@@ -21,6 +26,10 @@ build:
         - npm install
     script:
         - npm run build
+    only:
+        - merge_requests
+        - master
+        - main
 
 build-docker-image:
     stage: build-docker-image
@@ -36,6 +45,10 @@ build-docker-image:
         - docker tag ${DOCKER_USERNAME}/frontend:$CI_COMMIT_SHORT_SHA ${DOCKER_USERNAME}/frontend:latest
         - docker push ${DOCKER_USERNAME}/frontend:$CI_COMMIT_SHORT_SHA
         - docker push ${DOCKER_USERNAME}/frontend:latest
+
+    only:
+        - main
+        - master
 
 sonarcloud-check:
     stage: sonarcloud-check
@@ -58,3 +71,16 @@ sonarcloud-check:
         - master
         - main
         - develop
+
+deploy:
+    stage: deploy
+    needs:
+        - sonarcloud-check
+        - build-docker-image
+    image: bitnami/kubectl:latest
+    script:
+        - kubectl --kubeconfig ${KUBECONFIG} apply -f ${DEPLOYMENT_FRONTEND}
+        - kubectl --kubeconfig ${KUBECONFIG} apply -f ${INGRESS_FRONTEND}
+    only:
+        - master
+        - main
