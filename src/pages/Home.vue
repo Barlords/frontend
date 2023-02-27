@@ -25,7 +25,7 @@ onMounted(() => {
           severity: "error",
           summary: "Network Error",
           detail:
-            "Les produits n'ont pas été chargés. Vérifiez la connectivité à votre backend :)",
+            "Les produits n'ont pas été chargés. Vérifier la connectivité à votre backend :)",
           life: 8000,
         });
       });

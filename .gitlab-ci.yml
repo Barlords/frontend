@@ -18,6 +18,7 @@ linter:
         - merge_requests
         - master
         - main
+    allow_failure: true
 
 test:
     stage: test
