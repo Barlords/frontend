@@ -1,17 +1,28 @@
 name: Push on Main pipeline
 run-name: ${{ github.actor }} test sa PR 🚀
 on:
-    push:
-        branches:
-            - 'main'
-            - 'master'
+  push:
+    branches:
+      - 'main'
+      - 'master'
 jobs:
-    Linter:
-        runs-on: ubuntu-latest
-        container: node:18.9.1-alpine3.16
-        steps:
-            - uses: actions/checkout@v4
-            - name: Install dependencies
-              run: npm install
-            - name: Start Linter
-              run: npm run lint-check
+  Linter:
+    runs-on: ubuntu-latest
+    container: node:18.9.1-alpine3.16
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install dependencies
+        run: npm install
+      - name: Start Linter
+        run: npm run lint-check
+  
+  Tests:
+    needs: Linter
+    runs-on: ubuntu-latest
+    container: node:18.9.1-alpine3.16
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install dependencies
+        run: npm install
+      - name: Start Tests
+        run: npm run test:unit
