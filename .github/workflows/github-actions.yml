@@ -26,3 +26,14 @@ jobs:
         run: npm install
       - name: Start Tests
         run: npm run test:unit
+        
+  Build:
+    needs: Tests
+    runs-on: ubuntu-latest
+    container: node:18.9.1-alpine3.16
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install dependencies
+        run: npm install
+      - name: Build project
+        run: npm run build
