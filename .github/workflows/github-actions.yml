@@ -57,12 +57,17 @@ jobs:
   Deploy-Terraform:
     needs: Build-Docker-Image
     runs-on: ubuntu-latest
-    container: alpine/helm:latest
     steps:
       - uses: actions/checkout@v4
 
       - name: Setup Terraform CLI
         uses: hashicorp/setup-terraform@v2
+
+      - name: Setup Helm CLI
+        uses: azure/setup-helm@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }} # only needed if version is 'latest'
+        id: install
 
       - name: Clone Barlords/terraform-iac PUBLIC repository
         uses: GuillaumeFalourd/clone-github-repo-action@main
