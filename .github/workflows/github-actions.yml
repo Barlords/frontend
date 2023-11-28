@@ -53,3 +53,42 @@ jobs:
           docker tag ${{ secrets.DOCKER_USERNAME  }}/frontend:$GITHUB_RUN_ID ${{ secrets.DOCKER_USERNAME  }}/frontend:latest
           docker push ${{ secrets.DOCKER_USERNAME  }}/frontend:$GITHUB_RUN_ID
           docker push ${{ secrets.DOCKER_USERNAME  }}/frontend:latest
+
+  Deploy-Terraform:
+    needs: Build-Docker-Image
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Terraform CLI
+        uses: hashicorp/setup-terraform@v2
+
+      - name: Clone Barlords/terraform-iac PUBLIC repository
+        uses: GuillaumeFalourd/clone-github-repo-action@main
+        with:
+          owner: 'Barlords'
+          repository: 'terraform-iac'
+
+      - name: Terraform init, plan and apply
+        run: |
+          cd terraform-iac/terraform
+          
+          echo `pwd`
+          echo "** Running Terraform Init **"
+          terraform init
+          
+          echo "** Running Terraform Validate **"
+          terraform validate
+          
+          echo "** Running Terraform Plan **"
+          terraform plan
+          
+          echo "** Running Terraform Apply **"
+          terraform apply -auto-approve
+
+      - name: Terraform Destroy
+        run: |
+          cd terraform-iac/terraform
+          
+          echo "** Running Terraform Destroy **"
+          terraform destroy -auto-approve
