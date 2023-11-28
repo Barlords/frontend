@@ -57,6 +57,7 @@ jobs:
   Deploy-Terraform:
     needs: Build-Docker-Image
     runs-on: ubuntu-latest
+    container: alpine/helm:latest
     steps:
       - uses: actions/checkout@v4
 
@@ -68,6 +69,13 @@ jobs:
         with:
           owner: 'Barlords'
           repository: 'terraform-iac'
+
+      - name: Package Helm chart
+        run: |
+          cd terraform-iac/terraform
+          
+          echo "** Running Helm Package **"
+          helm package ./app/
 
       - name: Terraform init, plan and apply
         run: |
