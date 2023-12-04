@@ -58,50 +58,69 @@ jobs:
     needs: Build-Docker-Image
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-
-      - name: Setup Terraform CLI
-        uses: hashicorp/setup-terraform@v2
-
-      - name: Setup Helm CLI
-        uses: azure/setup-helm@v3
+      - name: Trigger child repo workflow
+        uses: convictional/trigger-worflow-and-wait@v1.6.1
         with:
-          token: ${{ secrets.GITHUB_TOKEN }} # only needed if version is 'latest'
-        id: install
+          owner: Barlords
+          repo: terraform-iac
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          workflow_file_name: github-action.yml
+          ref: main
+          wait_interval: 10
+          propagate_failure: true
+          trigger_workflow: true
+          wait_workflow: true
 
-      - name: Clone Barlords/terraform-iac PUBLIC repository
-        uses: GuillaumeFalourd/clone-github-repo-action@main
-        with:
-          owner: 'Barlords'
-          repository: 'terraform-iac'
 
-      - name: Package Helm chart
-        run: |
-          cd terraform-iac/terraform
-          
-          echo "** Running Helm Package **"
-          helm package ./app/
 
-      - name: Terraform init, plan and apply
-        run: |
-          cd terraform-iac/terraform
-          
-          echo `pwd`
-          echo "** Running Terraform Init **"
-          terraform init
-          
-          echo "** Running Terraform Validate **"
-          terraform validate
-          
-          echo "** Running Terraform Plan **"
-          terraform plan
-          
-          echo "** Running Terraform Apply **"
-          terraform apply -auto-approve
-
-      - name: Terraform Destroy
-        run: |
-          cd terraform-iac/terraform
-          
-          echo "** Running Terraform Destroy **"
-          terraform destroy -auto-approve
+#  Deploy-Terraform:
+#    needs: Build-Docker-Image
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/checkout@v4
+#
+#      - name: Setup Terraform CLI
+#        uses: hashicorp/setup-terraform@v2
+#
+#      - name: Setup Helm CLI
+#        uses: azure/setup-helm@v3
+#        with:
+#          token: ${{ secrets.GITHUB_TOKEN }} # only needed if version is 'latest'
+#        id: install
+#
+#      - name: Clone Barlords/terraform-iac PUBLIC repository
+#        uses: GuillaumeFalourd/clone-github-repo-action@main
+#        with:
+#          owner: 'Barlords'
+#          repository: 'terraform-iac'
+#
+#      - name: Package Helm chart
+#        run: |
+#          cd terraform-iac/terraform
+#
+#          echo "** Running Helm Package **"
+#          helm package ./app/
+#
+#      - name: Terraform init, plan and apply
+#        run: |
+#          cd terraform-iac/terraform
+#
+#          echo `pwd`
+#          echo "** Running Terraform Init **"
+#          terraform init
+#
+#          echo "** Running Terraform Validate **"
+#          terraform validate
+#
+#          echo "** Running Terraform Plan **"
+#          terraform plan
+#
+#          echo "** Running Terraform Apply **"
+#          terraform apply -auto-approve
+#
+#      - name: Terraform Destroy
+#        run: |
+#          cd terraform-iac/terraform
+#
+#          echo "** Running Terraform Destroy **"
+#          terraform destroy -auto-approve
