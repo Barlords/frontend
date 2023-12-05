@@ -14,18 +14,17 @@ export default class ProductsHttpService {
 
   getAllProducts(): Promise<Product[]> {
     return this.#client.get<ProductResponse[]>("products/").then((response) => {
-        console.log(response.data)
-        return response.data.map(
-            (productResponse) =>
-              new Product({
-                id: productResponse.id,
-                name: productResponse.name,
-                description: productResponse.description,
-                price: productResponse.price,
-              })
-          )
-        }
-    );
+      console.log(response.data);
+      return response.data.map(
+        (productResponse) =>
+          new Product({
+            id: productResponse.id,
+            name: productResponse.name,
+            description: productResponse.description,
+            price: productResponse.price,
+          })
+      );
+    });
   }
 
   getProductById(id: number): Promise<Product> {
