@@ -60,6 +60,10 @@ jobs:
     env:
       TEST: toto
     steps:
+      - name: test
+        run: |
+          echo "SHORT_SHA=$(git rev-parse --short ${{ github.sha }})" >> $GITHUB_ENV
+
       - name: Trigger terraform repo workflow
         uses: convictional/trigger-workflow-and-wait@v1.6.5
         with:
@@ -70,7 +74,7 @@ jobs:
           workflow_file_name: frontend-dispatch.yml
           ref: main
           wait_interval: 10
-          client_payload: '{"tag":"${{ env.TEST }}"}'
+          client_payload: '{"tag":"${{ env.SHORT_SHA }}"}'
           propagate_failure: true
           trigger_workflow: true
           wait_workflow: true
