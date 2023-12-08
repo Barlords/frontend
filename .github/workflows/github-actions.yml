@@ -60,6 +60,12 @@ jobs:
     env:
       TEST: $COMMIT_HASH
     steps:
+
+      - name: DISPLAY ENV
+        run: |
+          echo $COMMIT_HASH
+          echo TEST
+
       - name: Trigger terraform repo workflow
         uses: convictional/trigger-workflow-and-wait@v1.6.5
         with:
