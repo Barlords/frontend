@@ -65,10 +65,10 @@ jobs:
           repo: terraform-iac
           github_token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
           github_user: Barlords
-          workflow_file_name: github-actions.yml
+          workflow_file_name: frontend-dispatch.yml
           ref: main
           wait_interval: 10
-          client_payload: '{"var":"wala t con "}'
+          client_payload: '{"tag":${{ $GITHUB_RUN_ID }}}'
           propagate_failure: true
           trigger_workflow: true
           wait_workflow: true
