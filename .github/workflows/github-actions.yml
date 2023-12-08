@@ -75,7 +75,7 @@ jobs:
           workflow_file_name: frontend-dispatch.yml
           ref: main
           wait_interval: 10
-          client_payload: '{"tag":"${{ env.$COMMIT_HASH }}"}'
+          client_payload: '{"tag":"${{ env.COMMIT_HASH }}"}'
           propagate_failure: true
           trigger_workflow: true
           wait_workflow: true
