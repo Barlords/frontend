@@ -70,7 +70,7 @@ jobs:
           workflow_file_name: frontend-dispatch.yml
           ref: main
           wait_interval: 10
-          client_payload: '{"tag":"${{ env.$GITHUB_RUN_ID }}"}'
+          client_payload: '{"tag":"${{ env.GITHUB_RUN_ID }}"}'
           propagate_failure: true
           trigger_workflow: true
           wait_workflow: true
