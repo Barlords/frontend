@@ -55,7 +55,7 @@ jobs:
 #          docker push ${{ secrets.DOCKER_USERNAME  }}/frontend:latest
 
   Deploy-Terraform:
-    needs: Build-Docker-Image
+    #needs: Build-Docker-Image
     runs-on: ubuntu-latest
     steps:
       - name: Trigger terraform repo workflow
