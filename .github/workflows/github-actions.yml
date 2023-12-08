@@ -57,6 +57,8 @@ jobs:
   Deploy-Terraform:
     #needs: Build-Docker-Image
     runs-on: ubuntu-latest
+    env:
+      TEST: $COMMIT_HASH
     steps:
       - name: Trigger terraform repo workflow
         uses: convictional/trigger-workflow-and-wait@v1.6.5
@@ -68,7 +70,7 @@ jobs:
           workflow_file_name: frontend-dispatch.yml
           ref: main
           wait_interval: 10
-          client_payload: '{"tag":"${{ github.sha  }}"}'
+          client_payload: '{"tag":"${{ github.env.TEST }}"}'
           propagate_failure: true
           trigger_workflow: true
           wait_workflow: true
