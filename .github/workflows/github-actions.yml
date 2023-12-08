@@ -62,7 +62,7 @@ jobs:
       - name: DISPLAY ENV
         run: |
           echo "COMMIT_HASH=$(git rev-parse --short ${{ github.sha }})" >> $GITHUB_ENV
-          printf '%s\n' "COMMIT_HASH"
+          printf '%s\n' "$COMMIT_HASH"
       - name: Trigger terraform repo workflow
         uses: convictional/trigger-workflow-and-wait@v1.6.5
         with:
