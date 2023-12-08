@@ -57,12 +57,11 @@ jobs:
   Deploy-Terraform:
     #needs: Build-Docker-Image
     runs-on: ubuntu-latest
-    env:
-      TEST: $COMMIT_HASH
     steps:
 
       - name: DISPLAY ENV
         run: |
+          echo "COMMIT_HASH=$(git rev-parse --short ${{ github.sha }})" >> $GITHUB_ENV
           echo $COMMIT_HASH
           echo TEST
 
@@ -76,7 +75,7 @@ jobs:
           workflow_file_name: frontend-dispatch.yml
           ref: main
           wait_interval: 10
-          client_payload: '{"tag":"${{ github.env.TEST }}"}'
+          client_payload: '{"tag":"${{ env.$COMMIT_HASH }}"}'
           propagate_failure: true
           trigger_workflow: true
           wait_workflow: true
